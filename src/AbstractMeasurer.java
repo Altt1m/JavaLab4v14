@@ -5,8 +5,7 @@ public abstract class AbstractMeasurer
     protected String lowerLimit, upperLimit;
     protected double inaccuracy;
     protected String status;
-
-    public abstract void measure();
+    protected boolean isWorking;
 
     protected abstract void setValues();
 

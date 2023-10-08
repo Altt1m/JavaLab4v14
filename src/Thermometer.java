@@ -1,22 +1,25 @@
+import javax.xml.transform.SourceLocator;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Thermometer extends Measurer
+public class Thermometer extends Measurer implements ITemperature
 {
     private double length;
     private double width;
     private double height;
-    private static String thermalUnit = "°C";
+    private static String thermalUnit = CELSIUS;
+    private double value;
     private static ArrayList<Thermometer> objects = new ArrayList<>();
 
     public Thermometer() { }
 
-    public Thermometer(String name, String unit, String lowerLimit, String upperLimit,
+    public Thermometer(String name, String lowerLimit, String upperLimit,
                        double inaccuracy, String status, double length, double width, double height)
     {
-        super(name, unit, lowerLimit, upperLimit, inaccuracy, status);
+        super(name, lowerLimit, upperLimit, inaccuracy, status);
+        this.unit = thermalUnit;
         this.length = length;
         this.width = width;
         this.height = height;
@@ -32,6 +35,7 @@ public class Thermometer extends Measurer
         System.out.println("\nFill the thermometer's fields, please.");
         System.out.print("Name: "); this.name = scanner.nextLine();
         System.out.println("Thermal unit: " + thermalUnit);
+        this.unit = thermalUnit;
         System.out.print("Lower limit: "); this.lowerLimit = scanner.nextLine();
         System.out.print("Upper limit: "); this.upperLimit = scanner.nextLine();
         System.out.print("Inaccuracy: "); this.inaccuracy = Double.parseDouble(scanner.nextLine());
@@ -93,16 +97,71 @@ public class Thermometer extends Measurer
     @Override
     public void measure()
     {
-        double units = new Random().nextDouble(Double.parseDouble(lowerLimit), Double.parseDouble(upperLimit));
+        this.value = new Random().nextDouble(Double.parseDouble(lowerLimit), Double.parseDouble(upperLimit));
+        sound();
         System.out.println(MessageFormat.format("\nThermometer \"{0}\" has {1} {2} shown on it.", this.name,
-                                                                        String.format("%.1f", units), thermalUnit));
+                                                                        String.format("%.1f", value), thermalUnit));
+    }
+
+    @Override
+    protected String chooseUnit()
+    {
+        String respond;
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Choose your unit: °C(1) °F(2): ");
+        respond = scanner.nextLine();
+        if (respond.equals("2"))
+        {
+            return FAHRENHEIT;
+        }
+        else
+        {
+            return CELSIUS;
+        }
+    }
+
+    @Override
+    public void switchUnit()
+    {
+        if (this.unit.equals(CELSIUS))
+        {
+            this.unit = FAHRENHEIT;
+        }
+        else
+        {
+            this.unit = CELSIUS;
+        }
+    }
+
+    @Override
+    public void sound()
+    {
+        System.out.print("Bip-Bip! ");
+        System.out.println(MessageFormat.format("Thermometer \"{0}\" now know your temperature.", this.name));
+    }
+
+    @Override
+    public void update()
+    {
+        System.out.println(MessageFormat.format("Thermometer \"{0}\" successfully reset.", this.name));
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Name: "); this.name = scanner.nextLine();
+        System.out.println("Thermal unit: " + thermalUnit);
+        System.out.print("Lower limit: "); this.lowerLimit = scanner.nextLine();
+        System.out.print("Upper limit: "); this.upperLimit = scanner.nextLine();
+        System.out.print("Inaccuracy: "); this.inaccuracy = Double.parseDouble(scanner.nextLine());
+        System.out.print("Length: "); this.length = Double.parseDouble(scanner.nextLine());
+        System.out.print("Width: "); this.width = Double.parseDouble(scanner.nextLine());
+        System.out.print("Height: "); this.height = Double.parseDouble(scanner.nextLine());
+        System.out.print("Status: "); this.status = scanner.nextLine();
+        System.out.println(MessageFormat.format("Thermometer \"{0}\" successfully updated.", this.name));
     }
 
     public static void switchThermalUnit()
     {
-        if (thermalUnit.equals("°C"))
+        if (thermalUnit.equals(CELSIUS))
         {
-            thermalUnit = "°F";
+            thermalUnit = FAHRENHEIT;
             for (int i = 0; i < objects.size(); i++)
             {
                 double tempLower = Double.parseDouble(objects.get(i).lowerLimit);
@@ -113,7 +172,7 @@ public class Thermometer extends Measurer
         }
         else
         {
-            thermalUnit = "°C";
+            thermalUnit = CELSIUS;
             for (int i = 0; i < objects.size(); i++)
             {
                 double tempLower = Double.parseDouble(objects.get(i).lowerLimit);
@@ -160,6 +219,11 @@ public class Thermometer extends Measurer
     public double getHeight()
     {
         return this.height;
+    }
+
+    public String getValue()
+    {
+        return String.format("%.1f", value);
     }
 
 }
