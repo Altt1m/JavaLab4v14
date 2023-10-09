@@ -59,6 +59,7 @@ public class Measurer extends AbstractMeasurer implements IMeasurement
     public void update()
     {
         System.out.println(MessageFormat.format("Measurer \"{0}\" successfully reset.", this.name));
+        this.value = 0;
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nType measurer's fields again, please.");
         System.out.print("Name: "); this.name = scanner.nextLine();
@@ -70,6 +71,7 @@ public class Measurer extends AbstractMeasurer implements IMeasurement
         System.out.println(MessageFormat.format("Measurer \"{0}\" successfully updated.", this.name));
     }
 
+    @Override
     protected String chooseUnit()
     {
         String respond;
@@ -164,5 +166,8 @@ public class Measurer extends AbstractMeasurer implements IMeasurement
         return status;
     }
 
-
+    public String getValue()
+    {
+        return String.format("%.1f", value);
+    }
 }

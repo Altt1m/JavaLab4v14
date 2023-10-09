@@ -10,7 +10,6 @@ public class Thermometer extends Measurer implements ITemperature
     private double width;
     private double height;
     private static String thermalUnit = CELSIUS;
-    private double value;
     private static ArrayList<Thermometer> objects = new ArrayList<>();
 
     public Thermometer() { }
@@ -125,10 +124,22 @@ public class Thermometer extends Measurer implements ITemperature
     {
         if (this.unit.equals(CELSIUS))
         {
+            double tempLower = Double.parseDouble(this.lowerLimit);
+            double tempUpper = Double.parseDouble(this.upperLimit);
+            this.lowerLimit = Double.toString(tempLower * 1.8 + 32);
+            this.upperLimit = Double.toString(tempUpper * 1.8 + 32);
+            if (this.value != 0)
+                this.value = this.value * 1.8 + 32;
             this.unit = FAHRENHEIT;
         }
         else
         {
+            double tempLower = Double.parseDouble(this.lowerLimit);
+            double tempUpper = Double.parseDouble(this.upperLimit);
+            this.lowerLimit = Double.toString((tempLower - 32) / 1.8);
+            this.upperLimit = Double.toString((tempUpper - 32) / 1.8);
+            if (this.value != 0)
+                this.value = (this.value - 32) / 1.8;
             this.unit = CELSIUS;
         }
     }
@@ -144,6 +155,7 @@ public class Thermometer extends Measurer implements ITemperature
     public void update()
     {
         System.out.println(MessageFormat.format("Thermometer \"{0}\" successfully reset.", this.name));
+        this.value = 0;
         Scanner scanner = new Scanner(System.in);
         System.out.print("Name: "); this.name = scanner.nextLine();
         System.out.println("Thermal unit: " + thermalUnit);
