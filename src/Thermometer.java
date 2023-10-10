@@ -18,7 +18,6 @@ public class Thermometer extends Measurer implements ITemperature
                        double inaccuracy, String status, double length, double width, double height)
     {
         super(name, lowerLimit, upperLimit, inaccuracy, status);
-        this.unit = thermalUnit;
         this.length = length;
         this.width = width;
         this.height = height;
@@ -159,7 +158,8 @@ public class Thermometer extends Measurer implements ITemperature
         this.value = 0;
         Scanner scanner = new Scanner(System.in);
         System.out.print("Name: "); this.name = scanner.nextLine();
-        System.out.println("Thermal unit: " + thermalUnit);
+        this.unit = chooseUnit();
+        System.out.println("Thermal unit: " + this.unit);
         System.out.print("Lower limit: "); this.lowerLimit = scanner.nextLine();
         System.out.print("Upper limit: "); this.upperLimit = scanner.nextLine();
         System.out.print("Inaccuracy: "); this.inaccuracy = Double.parseDouble(scanner.nextLine());
