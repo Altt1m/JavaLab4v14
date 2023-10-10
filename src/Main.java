@@ -11,11 +11,18 @@ public class Main
         Thermometer thermo1 = new Thermometer("Thermo1", "34.3", "43.1",
                                             0.1, "Off", 18, 1.7, 0.8);
 
+        thermo1.getListing();
         thermo1.update();
+        thermo1.getListing();
+        System.out.println();
+
+        thermo1.measure();
+        System.out.println(thermo1.getValue());
+
+        thermo1.switchUnit();
+        thermo1.getListing();
         System.out.println(thermo1.getValue());
 
     }
-
-
 
 }

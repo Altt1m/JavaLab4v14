@@ -76,7 +76,7 @@ public class Measurer extends AbstractMeasurer implements IMeasurement
     {
         String respond;
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Choose your unit: m(1) m²(2) m³(3): ");
+        System.out.print("Choose your unit m(1) m²(2) m³(3): ");
         respond = scanner.nextLine();
         if (respond.equals("1"))
         {
@@ -168,6 +168,6 @@ public class Measurer extends AbstractMeasurer implements IMeasurement
 
     public String getValue()
     {
-        return String.format("%.1f", value);
+        return String.format("%.1f " + this.unit, value);
     }
 }

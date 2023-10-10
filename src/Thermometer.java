@@ -33,8 +33,8 @@ public class Thermometer extends Measurer implements ITemperature
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nFill the thermometer's fields, please.");
         System.out.print("Name: "); this.name = scanner.nextLine();
-        System.out.println("Thermal unit: " + thermalUnit);
-        this.unit = thermalUnit;
+        this.unit = chooseUnit();
+        System.out.println("Thermal unit: " + this.unit);
         System.out.print("Lower limit: "); this.lowerLimit = scanner.nextLine();
         System.out.print("Upper limit: "); this.upperLimit = scanner.nextLine();
         System.out.print("Inaccuracy: "); this.inaccuracy = Double.parseDouble(scanner.nextLine());
@@ -50,9 +50,9 @@ public class Thermometer extends Measurer implements ITemperature
     public void getListing()
     {
         System.out.println("\nName: " + name);
-        System.out.println("Thermal unit: " + thermalUnit);
-        System.out.println("Lower limit: " + String.format("%.1f", Double.parseDouble(lowerLimit)) + thermalUnit);
-        System.out.println("Upper limit: " + String.format("%.1f", Double.parseDouble(upperLimit)) + thermalUnit);
+        System.out.println("Thermal unit: " + this.unit);
+        System.out.println("Lower limit: " + String.format("%.1f", Double.parseDouble(lowerLimit)) + this.unit);
+        System.out.println("Upper limit: " + String.format("%.1f", Double.parseDouble(upperLimit)) + this.unit);
         System.out.println("Inaccuracy: " + inaccuracy + "%");
         System.out.println("Status: " + status);
         System.out.println("Length: " + length + " cm");
@@ -94,20 +94,11 @@ public class Thermometer extends Measurer implements ITemperature
     }
 
     @Override
-    public void measure()
-    {
-        this.value = new Random().nextDouble(Double.parseDouble(lowerLimit), Double.parseDouble(upperLimit));
-        sound();
-        System.out.println(MessageFormat.format("\nThermometer \"{0}\" has {1} {2} shown on it.", this.name,
-                                                                        String.format("%.1f", value), thermalUnit));
-    }
-
-    @Override
     protected String chooseUnit()
     {
         String respond;
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Choose your unit: °C(1) °F(2): ");
+        System.out.print("Choose your unit °C(1) °F(2): ");
         respond = scanner.nextLine();
         if (respond.equals("2"))
         {
@@ -120,8 +111,25 @@ public class Thermometer extends Measurer implements ITemperature
     }
 
     @Override
+    public void sound()
+    {
+        System.out.print("Bip-Bip! ");
+        System.out.print(MessageFormat.format("Thermometer \"{0}\" now knows your temperature.", this.name));
+    }
+
+    @Override
+    public void measure()
+    {
+        this.value = new Random().nextDouble(Double.parseDouble(lowerLimit), Double.parseDouble(upperLimit));
+        sound();
+        System.out.println(MessageFormat.format("\nThermometer \"{0}\" has {1} {2} shown on it.", this.name,
+                                                                        String.format("%.1f", value), thermalUnit));
+    }
+
+    @Override
     public void switchUnit()
     {
+        System.out.println("All thermometers' thermal units were switched!");
         if (this.unit.equals(CELSIUS))
         {
             double tempLower = Double.parseDouble(this.lowerLimit);
@@ -145,16 +153,9 @@ public class Thermometer extends Measurer implements ITemperature
     }
 
     @Override
-    public void sound()
-    {
-        System.out.print("Bip-Bip! ");
-        System.out.println(MessageFormat.format("Thermometer \"{0}\" now know your temperature.", this.name));
-    }
-
-    @Override
     public void update()
     {
-        System.out.println(MessageFormat.format("Thermometer \"{0}\" successfully reset.", this.name));
+        System.out.println(MessageFormat.format("\nThermometer \"{0}\" successfully reset.", this.name));
         this.value = 0;
         Scanner scanner = new Scanner(System.in);
         System.out.print("Name: "); this.name = scanner.nextLine();
@@ -180,6 +181,7 @@ public class Thermometer extends Measurer implements ITemperature
                 double tempUpper = Double.parseDouble(objects.get(i).upperLimit);
                 objects.get(i).lowerLimit = Double.toString(tempLower * 1.8 + 32);
                 objects.get(i).upperLimit = Double.toString(tempUpper * 1.8 + 32);
+                objects.get(i).unit = CELSIUS;
             }
         }
         else
@@ -191,6 +193,7 @@ public class Thermometer extends Measurer implements ITemperature
                 double tempUpper = Double.parseDouble(objects.get(i).upperLimit);
                 objects.get(i).lowerLimit = Double.toString((tempLower - 32) / 1.8);
                 objects.get(i).upperLimit = Double.toString((tempUpper - 32) / 1.8);
+                objects.get(i).unit = FAHRENHEIT;
             }
         }
         System.out.println("\nThermal unit was switched to " + thermalUnit + ".");
@@ -235,7 +238,7 @@ public class Thermometer extends Measurer implements ITemperature
 
     public String getValue()
     {
-        return String.format("%.1f", value);
+        return String.format("%.1f " + this.unit, value);
     }
 
 }
