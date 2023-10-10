@@ -128,7 +128,7 @@ public class Thermometer extends Measurer implements ITemperature
     @Override
     public void switchUnit()
     {
-        System.out.println("All thermometers' thermal units were switched!");
+        System.out.println(MessageFormat.format("{0} thermal unit was switched!", this.name));
         if (this.unit.equals(CELSIUS))
         {
             double tempLower = Double.parseDouble(this.lowerLimit);
@@ -172,6 +172,7 @@ public class Thermometer extends Measurer implements ITemperature
 
     public static void switchThermalUnit()
     {
+        System.out.println("All thermometers' thermal units were switched!");
         if (thermalUnit.equals(CELSIUS))
         {
             thermalUnit = FAHRENHEIT;
