@@ -63,7 +63,8 @@ public class Measurer extends AbstractMeasurer implements IMeasurement
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nType measurer's fields again, please.");
         System.out.print("Name: "); this.name = scanner.nextLine();
-        System.out.print("Measuring unit: "); this.unit = scanner.nextLine();
+        this.unit = chooseUnit();
+        System.out.print("Measuring unit: " + this.unit);
         System.out.print("Lower limit: "); this.lowerLimit = scanner.nextLine();
         System.out.print("Upper limit: "); this.upperLimit = scanner.nextLine();
         System.out.print("Inaccuracy: "); this.inaccuracy = Double.parseDouble(scanner.nextLine());
